@@ -1,0 +1,10 @@
+{
+  "name": "collabdraw",
+  "version": "0.0.1",
+  "description": "Every bit of it",
+  "dependencies": {
+    "express": "^4.13.3",
+    "socket.io": "^1.3.7"
+  },
+  "author": "rkuchimpos"
+}
