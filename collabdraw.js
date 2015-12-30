@@ -8,15 +8,15 @@ app.set('port', 3000);
 app.use('/index.js', express.static(__dirname + '/index.js'));
 
 app.get('/', function(req, res) {
-	res.sendFile(__dirname + '/index.html');
+    res.sendFile(__dirname + '/index.html');
 });
 
 io.on('connection', function(socket) {
-	socket.on('draw', function(data) {
-		socket.broadcast.emit('draw', data);
-	});
+    socket.on('draw', function(data) {
+        socket.broadcast.emit('draw', data);
+    });
 });
 
 server.listen(app.get('port'), function() {
-	console.log("Listening on port " + app.get('port'));
+    console.log("Listening on port " + app.get('port'));
 });
