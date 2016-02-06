@@ -1,10 +1,12 @@
-canvas = document.getElementById('canvas')
+var canvas = document.getElementById('canvas')
+canvas.height = 800;
+canvas.width = 1200;
 ctx = canvas.getContext('2d');
 ctx.fillStyle = "black";
 ctx.fillRect(0, 0, canvas.width, canvas.height);
 var toPaint = []
 var palette = ["red", "orange", "yellow", "green", "blue", "violet", "brown", "white"];
-strokeColor = palette[random(0, palette.length - 1)];
+var strokeColor = palette[random(0, palette.length - 1)];
 
 var socket = io();
 
