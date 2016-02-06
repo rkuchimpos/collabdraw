@@ -5,8 +5,7 @@ ctx = canvas.getContext('2d');
 ctx.fillStyle = "black";
 ctx.fillRect(0, 0, canvas.width, canvas.height);
 var toPaint = []
-var palette = ["red", "orange", "yellow", "green", "blue", "violet", "brown", "white"];
-var strokeColor = palette[random(0, palette.length - 1)];
+var strokeColor = randcolor();
 
 var socket = io();
 
@@ -21,6 +20,7 @@ canvas.onmousedown = function onmousedown(eDown) {
     };
     document.onmouseup = function(eUp) {
         document.onmousemove = function() {};
+        emptyPts();
     }
 }
 
@@ -49,9 +49,21 @@ function draw(pts, color) {
     }
 }
 
+function emptyPts() {
+    toPaint = [];
+}
+
 function random(lo, hi) {
     var base = Math.random();
     var randomNumber = (hi - lo) * base + lo;
 
     return Math.round(randomNumber);
+}
+
+function randcolor() {
+    var r = random(10, 255);
+    var g = random(10, 255);
+    var b = random(10, 255);
+
+    return "rgb(" + r + "," + g + "," + b +")";
 }
