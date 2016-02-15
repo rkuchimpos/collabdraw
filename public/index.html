@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>collabdraw</title>
+   	<link rel="stylesheet" type="text/css" href="index.css">
+   	<link rel="stylesheet" type="text/css" href="bootstrap.min.css">
+</head>
+<body>
+    <canvas id="canvas">
+    </canvas>
+    <div id="chat">
+    	<form class="form-group" id="form" action="">
+    		<input class="form-control" id="msgbox" placeholder="Say something"/>
+    		<input class="btn btn-primary" type="button" id="btnsend" value="Send" style="margin-top: 10px"></form>
+    	</form>
+    	<ul id="messages"></ul>
+    </div>
+</body>
+<script src="/socket.io/socket.io.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+<script type="text/javascript" src="index.js"></script>
+</html>

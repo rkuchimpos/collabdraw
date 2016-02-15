@@ -7,7 +7,7 @@ var logger = require('morgan');
 
 app.set('port', 3000);
 
-app.use('/index.js', express.static(__dirname + '/index.js'));
+app.use('/', express.static(__dirname + '/public'));
 app.use(favicon(__dirname + '/favicon.png'));
 
 app.get('/', function(req, res) {
@@ -15,9 +15,22 @@ app.get('/', function(req, res) {
 });
 
 app.use(logger('dev'));
+
 io.on('connection', function(socket) {
+	socket.on('disconnect', function() {
+		console.log('* User left');
+		io.emit('leave', socket.username);
+	});
+	socket.on('join', function(nick) {
+		console.log('* User joined');
+		socket.username = nick;
+		io.emit('join', nick);
+	});
     socket.on('draw', function(data) {
-        socket.broadcast.emit('draw', data);
+        io.emit('draw', data);
+    });
+    socket.on('msg', function(postinfo) {
+    	io.emit('msg', postinfo);
     });
 });
 
