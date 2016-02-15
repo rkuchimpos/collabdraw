@@ -43,13 +43,13 @@ function post(postinfo) {
         return
     }
     addMsg("<span style='color: " + postinfo.color + "'><b>" + postinfo.nick + "</b></span> said <br/><i>" + postinfo.body + "</i>");
-    msgbox.value = "";
 }
 
 function onPost() {
     var msgbox = document.getElementById('msgbox');
     var msg = msgbox.value;
     socket.emit('msg', {nick: nick, body: msg, color: strokeColor})
+    msgbox.value = "";
 }
 
 function addMsg(content) {
@@ -65,7 +65,7 @@ function draw(coordsPrev, coords, color) {
     ctx.lineWidth = 5;
     ctx.beginPath();
     ctx.moveTo(coordsPrev.x, coordsPrev.y);
-    ctx.quadraticCurveTo(coords.x, coords.y, coords.x, coords.y);
+    ctx.lineTo(coords.x, coords.y);
     ctx.closePath();
     ctx.stroke();
 }
