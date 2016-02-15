@@ -1,56 +1,56 @@
-var canvas = document.getElementById('canvas')
+var canvas = document.getElementById('canvas');
 canvas.height = 800;
 canvas.width = 1200;
 ctx = canvas.getContext('2d');
 ctx.fillStyle = "black";
 ctx.fillRect(0, 0, canvas.width, canvas.height);
-var toPaint = []
 var strokeColor = randcolor();
 
 var socket = io();
 
-canvas.onmousedown = function onmousedown(eDown) {
-    toPaint.push({ x: eDown.clientX, y: eDown.clientY, drag: false });
-    draw(toPaint, strokeColor);
-    socket.emit('draw', {points: toPaint, color: strokeColor});
+var coords = {};
+var coordsPrev = {};
+
+canvas.onmousedown = function(eDown) {
+    var x = eDown.clientX;
+    var y = eDown.clientY;
+    coordsPrev = { x: x, y: y };
+    coords = { x: x + 1, y: y };
+    draw(coordsPrev, coords, strokeColor);
+    socket.emit('draw', {
+        coordsPrev: coordsPrev,
+        coords: coords,
+        color: strokeColor
+    });
     document.onmousemove = function(eMove) {
-        toPaint.push({ x: eMove.clientX, y: eMove.clientY, drag: true });
-        draw(toPaint, strokeColor);
-        socket.emit('draw', {points: toPaint, color: strokeColor});
+        coords = { x: eMove.clientX, y: eMove.clientY };
+        draw(coordsPrev, coords, strokeColor);
+        socket.emit('draw', {
+            coordsPrev: coordsPrev,
+            coords: coords,
+            color: strokeColor
+        });
+        coordsPrev = coords;
     };
     document.onmouseup = function(eUp) {
         document.onmousemove = function() {};
-        emptyPts();
-    }
+        coordsPrev = {};
+    };
 }
 
 socket.on('draw', function(data) {
-    draw(data.points, data.color)
+    draw(data.coordsPrev, data.coords, data.color);
 });
 
-// TODO: optimize so that already-drawn points are not redrawn
-function draw(pts, color) {
+function draw(coordsPrev, coords, color) {
     ctx.strokeStyle = color;
     ctx.lineJoin = "round";
     ctx.lineWidth = 5;
-
-    for (var i = 0; i < pts.length; i++) {
-        ctx.beginPath();
-        ptPrev = pts[i - 1];
-        pt = pts[i];
-        if (pts.length >= 2 && pt.drag) {
-            ctx.moveTo(ptPrev.x, ptPrev.y);
-        } else {
-            ctx.moveTo(pt.x - 1, pt.y); // Move it a little to give the illusion of drawing a point
-        }
-        ctx.lineTo(pt.x, pt.y);
-        ctx.closePath();
-        ctx.stroke();
-    }
-}
-
-function emptyPts() {
-    toPaint = [];
+    ctx.beginPath();
+    ctx.moveTo(coordsPrev.x, coordsPrev.y);
+    ctx.lineTo(coords.x, coords.y);
+    ctx.closePath();
+    ctx.stroke();
 }
 
 function random(lo, hi) {
